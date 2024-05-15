@@ -1,4 +1,4 @@
-# RISC-V RV32I[MAFC] emulator
+# RISC-V RV32I[MAFC] 模拟器
 ![GitHub Actions](https://github.com/sysprog21/rv32emu/actions/workflows/main.yml/badge.svg)
 ```
                        /--===============------\
@@ -14,80 +14,76 @@
      |____/_____|     [-------------------------]
 ```
 
-`rv32emu` is an emulator for the 32 bit [RISC-V processor model](https://riscv.org/technical/specifications/) (RV32),
-faithfully implementing the RISC-V instruction set architecture (ISA).
-It serves as an exercise in modeling a modern RISC-based processor, demonstrating
-the device's operations without the complexities of a hardware implementation.
-The code is designed to be accessible and expandable, making it an ideal educational
-tool and starting point for customization. It is primarily written in C99, with
-a focus on efficiency and readability.
+`rv32emu` 是一个 32 位 [RISC-V 处理器模型](https://riscv.org/technical/specifications/) (RV32),
+忠实实现了 RISC-V 指令集架构 (ISA).
+作为一个对现代RISC处理器的建模练习，它的设备操作并没有像硬件实现那么复杂。
+该项目旨在易于学习和扩展，希望其能够成为理想的教学工具和定制化工具的基础。
+该代码主要使用 C99 标准进行书写，注重效率和易读性。
 
-Features:
-* Fast interpreter for executing the RV32 ISA
-* Comprehensive support for RV32I and M, A, F, C extensions
-* Memory-efficient design
-* Built-in ELF loader
-* Implementation of commonly used newlib system calls
-* Experimental SDL-based display/event/audio system calls for running video games
-* Support for remote GDB debugging
-* Experimental JIT compiler for performance boost while maintaining a small footprint
+特性:
+* 能够快速执行 RV32 ISA 的解释器
+* 全面支持 RV32I 及 M、A、F、C 扩展
+* 内存高利用率设计
+* 内置 ELF loader
+* 使用 newlib 系统调用实现
+* 用于运行视频游戏的基于 SDL 的实验性显示/事件/音频系统调用
+* 支持远程 GDB 调试
+* 实验性 JIT 编译器，可在保持较小占用空间的同时提高性能
 
 ## Build and Verify
 
-`rv32emu` relies on certain third-party packages for full functionality and access to all its features.
-To ensure proper operation, the target system should have the [SDL2 library](https://www.libsdl.org/)
-and [SDL2_Mixer library](https://wiki.libsdl.org/SDL2_mixer) installed.
+`rv32emu` 依赖于某些第三方软件包来获得完整的功能和特性。为确保正确执行，目标系统应已安装
+ [SDL2 library](https://www.libsdl.org/) 
+和 [SDL2_Mixer library](https://wiki.libsdl.org/SDL2_mixer) 。
 * macOS: `brew install sdl2 sdl2_mixer`
 * Ubuntu Linux / Debian: `sudo apt install libsdl2-dev libsdl2-mixer-dev`
 
-Build the emulator.
+构建模拟器：
 ```shell
 $ make
 ```
 
-Run sample RV32I[M] programs:
+运行示例 RV32I[M] 程序:
 ```shell
 $ make check
 ```
 
-Run [Doom](https://en.wikipedia.org/wiki/Doom_(1993_video_game)), the classical video game, via `rv32emu`:
+通过 `rv32emu` 运行 [Doom](https://en.wikipedia.org/wiki/Doom_(1993_video_game)) , 一个经典的视频游戏:
 ```shell
 $ make doom
 ```
 
-The build script will then download data file for Doom automatically.
-When Doom is loaded and run, an SDL2-based window ought to appear.
+构建脚本将自动下载 Doom 的数据文件。
+加载并运行 Doom 时，应该会出现一个基于SDL2的窗口。
 
-If RV32F support is enabled (turned on by default), [Quake](https://en.wikipedia.org/wiki/Quake_(series))
-demo program can be launched via:
+如果启用了 RV32F 支持 (默认开启), [Quake](https://en.wikipedia.org/wiki/Quake_(series)) 演示程序可以通过以下方式启动：
 ```shell
 $ make quake
 ```
 
-The usage and limitations of Doom and Quake demo are listed in [docs/demo.md](docs/demo.md).
+Doom 和 Quake 的演示程序的用法和限制在 [docs/demo.md](docs/demo.md) 中列出.
 
 ### Docker image
 
 The image containing all the necessary tools for development and testing can be executed by `docker run -it sysprog21/rv32emu:latest`. It works for both x86-64 and aarch64 (Apple's M1 chip) machines.
 
-### Customization
+### 客制化
 
-`rv32emu` is configurable, and you can override the below variable(s) to fit your expectations:
-* `ENABLE_EXT_M`: Standard Extension for Integer Multiplication and Division
-* `ENABLE_EXT_A`: Standard Extension for Atomic Instructions
-* `ENABLE_EXT_F`: Standard Extension for Single-Precision Floating Point Instructions
-* `ENABLE_EXT_C`: Standard Extension for Compressed Instructions (RV32C.D excluded)
-* `ENABLE_Zicsr`: Control and Status Register (CSR)
-* `ENABLE_Zifencei`: Instruction-Fetch Fence
-* `ENABLE_GDBSTUB` : GDB remote debugging support
-* `ENABLE_SDL` : Experimental Display and Event System Calls
-* `ENABLE_JIT` : Experimental JIT compiler
+`rv32emu` 是可配置的，您可以覆盖以下变量以实现您的需求:
+* `ENABLE_EXT_M`: M 扩展，用于整数乘除法指令的标准扩展
+* `ENABLE_EXT_A`: A 扩展，用于原子指令的的标准扩展
+* `ENABLE_EXT_F`: F 扩展，用于单精度浮点指令的标准扩展
+* `ENABLE_EXT_C`: C 扩展，用于压缩指令的标准扩展( RV32C.D 除外 )
+* `ENABLE_Zicsr`: Zicsr 扩展，控制和状态寄存器 ( CSR )
+* `ENABLE_Zifencei`: Zifencei 扩展，取指围栏，同步指令流和数据流
+* `ENABLE_GDBSTUB` : GDB 远程调试支持
+* `ENABLE_SDL` : SDL 支持，实验性显示和事件系统调用
+* `ENABLE_JIT` : 实验性 JIT 编译器
 
-e.g., run `make ENABLE_EXT_F=0` for the build without floating-point support.
+例：执行 `make ENABLE_EXT_F=0` 以构建没有浮点支持的程序。
 
-Alternatively, configure the above items in advance by executing `make config` and
-specifying them in a configuration file. Subsequently, run `make` according to the provided
-configurations. For example, employ the following commands:
+或者，通过执行 `make config` 和在配置文件中指定这些选项。随后，根据提供的配置运行 `make` 。
+例如，使用一下命令：
 ```shell
 $ make config ENABLE_SDL=0
 $ make
